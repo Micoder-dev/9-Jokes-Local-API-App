@@ -6,15 +6,23 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.jokesapp.controller.CardsDataAdapter;
+import com.example.jokesapp.model.Joke;
 import com.wenchao.cardstack.CardStack;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     CardStack mCardStack;
     CardsDataAdapter mCardAdapter;
+    private List<Joke> allJokes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +38,56 @@ public class MainActivity extends AppCompatActivity {
         mCardStack.setStackMargin(20);
 
         mCardAdapter = new CardsDataAdapter(getApplicationContext(),0);
-        mCardAdapter.add("test1");
-        mCardAdapter.add("test2");
-        mCardAdapter.add("test3");
-        mCardAdapter.add("test4");
-        mCardAdapter.add("test5");
+
+        try {
+
+            JSONObject rootObject = new JSONObject(loadJSONFromAsset());
+
+            JSONArray fatJokes = rootObject.getJSONArray("fat");
+            addJokesToArrayList(fatJokes, allJokes);
+
+            JSONArray stupidJokes = rootObject.getJSONArray("stupid");
+            addJokesToArrayList(stupidJokes, allJokes);
+
+            JSONArray uglyJokes = rootObject.getJSONArray("ugly");
+            addJokesToArrayList(uglyJokes, allJokes);
+
+            JSONArray nastyJokes = rootObject.getJSONArray("nasty");
+            addJokesToArrayList(nastyJokes, allJokes);
+
+            JSONArray hairyJokes = rootObject.getJSONArray("hairy");
+            addJokesToArrayList(hairyJokes, allJokes);
+
+            JSONArray baldJokes = rootObject.getJSONArray("bald");
+            addJokesToArrayList(baldJokes, allJokes);
+
+            JSONArray oldJokes = rootObject.getJSONArray("old");
+            addJokesToArrayList(oldJokes, allJokes);
+
+            JSONArray poorJokes = rootObject.getJSONArray("poor");
+            addJokesToArrayList(poorJokes, allJokes);
+
+            JSONArray shortJokes = rootObject.getJSONArray("short");
+            addJokesToArrayList(shortJokes, allJokes);
+
+            JSONArray skinnyJokes = rootObject.getJSONArray("skinny");
+            addJokesToArrayList(skinnyJokes, allJokes);
+
+            JSONArray tallJokes = rootObject.getJSONArray("tall");
+            addJokesToArrayList(tallJokes, allJokes);
+
+            JSONArray likeJokes = rootObject.getJSONArray("like");
+            addJokesToArrayList(likeJokes, allJokes);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        for (Joke joke : allJokes) {
+
+            mCardAdapter.add(joke.getJokeText());
+
+        }
 
         mCardStack.setAdapter(mCardAdapter);
 
@@ -54,6 +107,20 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
         return json;
+    }
+
+    private void addJokesToArrayList(JSONArray jsonArray, List<Joke> arrayList) {
+        try {
+            if (jsonArray != null) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    arrayList.add(new Joke(jsonArray.getString(i), false));
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }
