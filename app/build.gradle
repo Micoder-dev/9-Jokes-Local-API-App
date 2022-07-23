@@ -38,4 +38,7 @@ dependencies {
 
     //github.com/wenchaojiang/AndroidSwipeableCardStack
     implementation 'com.github.wenchaojiang:AndroidSwipeableCardStack:0.1.6'
+
+    //preference
+    implementation 'androidx.preference:preference:1.2.0'
 }
