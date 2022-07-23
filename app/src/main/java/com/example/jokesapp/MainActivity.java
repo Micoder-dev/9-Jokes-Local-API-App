@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CardStack.CardEventListener{
 
     CardStack mCardStack;
     CardsDataAdapter mCardAdapter;
@@ -123,4 +123,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean swipeEnd(int section, float distance) {
+
+        return (distance>300)? true : false;
+
+    }
+
+    @Override
+    public boolean swipeStart(int section, float distance) {
+        return true;
+    }
+
+    @Override
+    public boolean swipeContinue(int section, float distanceX, float distanceY) {
+        return true;
+    }
+
+    @Override
+    public void discarded(int mIndex, int direction) {
+
+    }
+
+    @Override
+    public void topCardTapped() {
+
+    }
 }
